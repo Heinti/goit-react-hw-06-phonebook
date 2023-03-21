@@ -3,6 +3,7 @@ import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
+import { Test } from './test/Test';
 
 export const App = () => {
   const [contacts, setContacts] = useState(getDataFromLocal);
@@ -58,13 +59,15 @@ export const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <Test></Test>
+
+      {/* <h1>Phonebook</h1>
       <ContactForm onSubmit={addContactFormData} />
 
       <h2>Contacts</h2>
       <Filter onChange={filterContactData} value={filter} />
 
-      <ContactList data={visibleContacts} onDelete={deleteContactFormData} />
+      <ContactList data={visibleContacts} onDelete={deleteContactFormData} /> */}
     </div>
   );
 };
