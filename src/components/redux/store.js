@@ -23,19 +23,43 @@
 
 
 import { configureStore } from "@reduxjs/toolkit";
-import { createReducer,createAction } from "@reduxjs/toolkit";
+import { contactsReducer } from "./tastsSlice";
+import { filterReducer } from "./filterSlice";
+// import { createSlice } from "@reduxjs/toolkit";
 
-export const increment = createAction = ('myValue/increment')
-export const decrement = createAction = ('myValue/decrement')
+// export const increment = createAction('myValue/increment')
+// export const decrement = createAction('myValue/decrement')
 
-const myReducer = createReducer =(10, {
-[increment]: (state, action)=> state + action.payload,
-[decrement]: (state, action)=> state - action.payload,
+// const myReducer = createReducer (10, {
+// [increment]: (state, action)=> state + action.payload,
+// [decrement]: (state, action)=> state - action.payload,
 
-})
+// })
 
-export const store = configureStore =({
-  reducer: {
-    myValue: myReducer,
+// const myValueSlice = createSlice({
+//   name: "myValue",
+//   initialState: 10,
+//   reducers: {
+//     increment(state, action) {
+//       return state += action.payload
+//     },
+//     decrement(state, action){
+//       return state -= action.payload
+//     }
+//   }
+// })
+
+//   export const {increment, decrement} = myValueSlice.actions
+
+// export const store = configureStore({
+//   reducer: {
+//     myValue: myValueSlice.reducer,
+//   }
+// })
+
+export const store = configureStore({
+  reducer:{
+    contacts: contactsReducer,
+    filter: filterReducer,
   }
 })

@@ -1,46 +1,67 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-import { nanoid } from 'nanoid';
-import { Test } from './test/Test';
+// import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, deleteContact } from './redux/tastsSlice';
+// import { Test } from './test/Test';
+import { getContacts, getFilterValue } from './redux/selectors';
+
 
 export const App = () => {
-  const [contacts, setContacts] = useState(getDataFromLocal);
-  const [filter, setFilter] = useState('');
+  // const [contacts, setContacts] = useState([]);
+  // const [filter, setFilter] = useState('');
 
-  function getDataFromLocal() {
-    const localSt = localStorage.getItem('contacts');
-    const parseSt = JSON.parse(localSt);
+  const dispatch = useDispatch()
+  const contacts = useSelector(getContacts)
+  const filter = useSelector(getFilterValue)
 
-    if (parseSt) {
-      return parseSt;
-    }
-    return [];
-  }
+  console.log(filter)
+  
+  // LOCAL-STORAGE
+  // function getDataFromLocal() {
+  //   const localSt = localStorage.getItem('contacts');
+  //   const parseSt = JSON.parse(localSt);
 
-  const addContactFormData = data => {
-    console.log(data)
-    const newContact = { id: nanoid(), name: data.name, number: data.number };
+  //   if (parseSt) {
+  //     return parseSt;
+  //   }
+  //   return [];
+  // }
 
-    const findDouble = contacts.find(({ name }) => {
-      return name === data.name;
-    });
+  function addContactFormData ({name, number}) {
+    // console.log(data)
+    // const newContact = { id: nanoid(), name: data.name, number: data.number };
 
-    if (findDouble) {
-      return alert(`${findDouble.name} is already in contact`);
-    }
+    // const findDouble = contacts.find(({ name }) => {
+    //   return name === data.name;
+    // });
 
-    setContacts([...contacts, newContact]);
+    // if (findDouble) {
+    //   return alert(`${findDouble.name} is already in contact`);
+    // }
+
+    // setContacts([...contacts, newContact]);
+
+    dispatch(addContact(name, Number(number)))
+
   };
 
   const deleteContactFormData = dataId => {
-    setContacts(contacts.filter(contact => contact.id !== dataId));
+    // setContacts(contacts.filter(contact => contact.id !== dataId));
+
+    dispatch(deleteContact(dataId))
   };
 
   const filterContactData = e => {
-    const filverValue = e.target.value;
-    setFilter(filverValue);
+    const filterValue = e.target.value;
+      console.log(filterValue)
+      // console.log(dispatch(getFilter(filverValue)))
+
+      dispatch(getFilterValue(e.target.value))
+
+    // setFilter(filverValue);
 
   };
 
@@ -59,15 +80,15 @@ export const App = () => {
 
   return (
     <div>
-      <Test></Test>
+      {/* <Test></Test> */}
 
-      {/* <h1>Phonebook</h1>
+      <h1>Phonebook</h1>
       <ContactForm onSubmit={addContactFormData} />
 
       <h2>Contacts</h2>
       <Filter onChange={filterContactData} value={filter} />
 
-      <ContactList data={visibleContacts} onDelete={deleteContactFormData} /> */}
+      <ContactList data={visibleContacts} onDelete={deleteContactFormData} />
     </div>
   );
 };
@@ -79,7 +100,7 @@ export const App = () => {
 // export class App extends Component {
 //   state = {
 //     contacts: [
-//       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+//       { id: 'id-1', name: 'Rosie Simpson'number,: '459-12-56' },
 //       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
 //       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
 //       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
