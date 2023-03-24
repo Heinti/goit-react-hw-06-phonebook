@@ -11,7 +11,7 @@
 //       filters: {
 //         status: "all",
 //       },
-    
+
 // }
 
 // const rootReducer = (state = initialState, action) =>{
@@ -21,10 +21,51 @@
 
 // export const store = createStore(rootReducer, enhancer)
 
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage';
 
-import { configureStore } from "@reduxjs/toolkit";
-import { contactsReducer } from "./tastsSlice";
-import { filterReducer } from "./filterSlice";
+
+import { contactsReducer } from './contactSlice';
+import { filterReducer } from './filterSlice';
+
+const rootReducer = combineReducers({
+  contacts: contactsReducer,
+  filter: filterReducer,
+});
+
+const persistConfig = {
+  key: 'root',  
+  storage,
+  whitelist: ['contacts']
+};
+
+const persistRootReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({
+  reducer: persistRootReducer,
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  },
+);
+
+export const persistor = persistStore(store)
+
+
+
 // import { createSlice } from "@reduxjs/toolkit";
 
 // export const increment = createAction('myValue/increment')
@@ -33,9 +74,7 @@ import { filterReducer } from "./filterSlice";
 // const myReducer = createReducer (10, {
 // [increment]: (state, action)=> state + action.payload,
 // [decrement]: (state, action)=> state - action.payload,
-
 // })
-
 // const myValueSlice = createSlice({
 //   name: "myValue",
 //   initialState: 10,
@@ -56,10 +95,3 @@ import { filterReducer } from "./filterSlice";
 //     myValue: myValueSlice.reducer,
 //   }
 // })
-
-export const store = configureStore({
-  reducer:{
-    contacts: contactsReducer,
-    filter: filterReducer,
-  }
-})
